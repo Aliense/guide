@@ -80,16 +80,23 @@ These are placed inside `module.exports` so they can be read by other files; nam
 :::: code-group
 ::: code-group-item commands/ping.js
 ```js
-const { SlashCommandBuilder } = require('discord.js');
+const { SlashCommandBuilder } = require('discord.js')
+
+var Command = new SlashCommandBuilder()
+				  
+
+Command.setName('ping')
+Command.setDescription('Replies with Pong!')
+Command.type =1
+//type is a required parameter, but is not initialized in the constructor
 
 module.exports = {
-	data: new SlashCommandBuilder()
-		.setName('ping')
-		.setDescription('Replies with Pong!'),
-	async execute(interaction) {
-		await interaction.reply('Pong!');
-	},
-};
+	data:Command,
+	async execute(interaction){
+		await interaction.reply('Pong!') 
+}
+
+}
 ```
 :::
 ::::
