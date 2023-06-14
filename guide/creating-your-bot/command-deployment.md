@@ -78,11 +78,25 @@ const rest = new REST().setToken(token);
 	try {
 		console.log(`Started refreshing ${commands.length} application (/) commands.`);
 
+		// By documentaion of Discord to create command must be used method POST
+		// withOut headers Discord return error "code: 'CONTENT_TYPE_INVALID', message: `Expected "Content-Type" header to be one of {'application/json'}.`
+		
+		// If try send AllCommand, We get Error code: 'DICT_TYPE_CONVERT', message: 'Only dictionaries may be used in a DictType'
+		
+		//Actual to api/v10. May be not actual to GuildCommands, but actual to applicationCommands
+		for (let i in command){
+			var data = await rest.post(
+				Routes.applicationGuildCommands(clientId, guildId),
+				{ body: commands[i] , headers:{'Content-Type':'application/json'} },	
+			)
+		}
+		/*
 		// The put method is used to fully refresh all commands in the guild with the current set
 		const data = await rest.put(
 			Routes.applicationGuildCommands(clientId, guildId),
 			{ body: commands },
 		);
+		*/
 
 		console.log(`Successfully reloaded ${data.length} application (/) commands.`);
 	} catch (error) {
@@ -112,9 +126,23 @@ To deploy global commands, you can use the same script from the [guild commands]
 <!-- eslint-skip -->
 
 ```js {2}
+/*
+// By documentaion of Discord to create command must be used method POST
+// withOut headers Discord return error "code: 'CONTENT_TYPE_INVALID', message: `Expected "Content-Type" header to be one of {'application/json'}.`
+		
+// If try send AllCommand, We get Error code: 'DICT_TYPE_CONVERT', message: 'Only dictionaries may be used in a DictType'
+		
+//Actual to api/v10
+for (let i in command){
+	var data = await rest.post(
+		Routes.applicationGuildCommands(clientId, guildId),
+		{ body: commands[i] , headers:{'Content-Type':'application/json'} },	
+	)
+}
 await rest.put(
 	Routes.applicationCommands(clientId),
 	{ body: commands },
+*/
 );
 ```
 
